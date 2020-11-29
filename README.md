@@ -23,3 +23,6 @@ This module contains all my preprocessing functions for text data.
     1. Entities
     2. Dependencies
     3. Part of speech elements
+
+# Other components
+1. It needs to be run in parallel so that it can handle a large number of documents at a time. 
