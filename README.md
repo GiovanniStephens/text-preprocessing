@@ -19,3 +19,7 @@ This module contains all my preprocessing functions for text data.
     2. HTML tags
 8. POS tagging
 9. DEP tagging
+10. Removal of specifics such as:
+    1. Entities
+    2. Dependencies
+    3. Part of speech elements
