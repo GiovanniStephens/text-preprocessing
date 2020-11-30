@@ -2,24 +2,24 @@
 This module contains all my preprocessing functions for text data. 
 
 # Things I would like to include:
-1. Tokenising
-2. Normalising
+1. Tokenising (Using SpaCy)
+2. Normalising (Using SpaCy and re)
     1. entities (e.g. names, places, organizations, numbers, etc.)
     2. slang words (e.g. dunno => do not know)
     3. contractions (e.g. don't know => do not know)
     4. capitalization
     5. non ASCII characters
     6. Smilies
-3. Stopword removal
-4. Punctuation removal
-5. Spelling correction
-6. Lemmatization
-7. Removal of noise
+3. Stopword removal (Using SpaCy)
+4. Punctuation removal (Using SpaCy)
+5. Spelling correction (pySymSpell or some kind of dl model)
+6. Lemmatization (Using SpaCy)
+7. Removal of noise (Using SpaCy)
     1. Extra whitespace
     2. HTML tags
-8. POS tagging
-9. DEP tagging
-10. Removal of specifics such as:
+8. POS tagging (Using SpaCy)
+9. DEP tagging (Using SpaCy)
+10. Removal of specifics such as: (Using SpaCy)
     1. Entities
     2. Dependencies
     3. Part of speech elements
