@@ -25,5 +25,10 @@ class test_textPreprocessing(unittest.TestCase):
         self.assertEqual(preprocessor.nlp.pipe_names, \
              ['tagger', 'parser', 'ner'])
 
+    def test_tokenizer(self):
+        """Tests to see if the preprocessor has tokenised correctly"""
+        self.assertEqual(['This', 'is', 'a', 'testing', 'sentence', '.'], \
+            [token.text for token in self.proprocessor.nlp_utterances[0]])
+
 if __name__ == '__main__':
     unittest.main()
