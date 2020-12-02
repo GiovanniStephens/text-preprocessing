@@ -66,10 +66,25 @@ class test_textPreprocessing(unittest.TestCase):
 
     def test_remove_pos(self):
         """Tests removing nouns from a test utterance."""
-        no_dep = tp.remove_pos(\
+        no_pos = tp.remove_pos(\
             self.proprocessor.nlp_utterances[3], 'NOUN')
-        text_no_dep = [token.text for token in no_dep]
-        self.assertEqual(text_no_dep, ['is', 'a', 'common', '.'])
+        text_no_pos = [token.text for token in no_pos]
+        self.assertEqual(text_no_pos, ['John', 'is', 'a', 'common', '.'])
+
+    def test_correct_spelling(self):
+        """Testing the spell checker."""
+        tp.load_sym_spell_dict()
+        self.assertEqual(tp.correct_spelling('thsi is a test.'), 'this is a test')
+
+    def test_correct_spelling_joined(self):
+        """Testing the spell checker with joined words."""
+        tp.load_sym_spell_dict()
+        self.assertEqual(tp.correct_spelling('somethingcaroline did.'), 'something caroline did')
+
+    def test_correct_spelling_caps(self):
+        """Testing the spell checker with joined words."""
+        tp.load_sym_spell_dict()
+        self.assertEqual(tp.correct_spelling('somethingCaroline DID.'), 'something Caroline DID')
 
 if __name__ == '__main__':
     unittest.main()
