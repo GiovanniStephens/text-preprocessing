@@ -57,5 +57,12 @@ class test_textPreprocessing(unittest.TestCase):
         text_no_ent = [token.text for token in no_ent]
         self.assertEqual(text_no_ent, ['is', 'a', 'common', 'name', '.'])
 
+    def test_remove_dep(self):
+        """Tests removing a dependency from a test utterance."""
+        no_dep = tp.remove_dependency(\
+            self.proprocessor.nlp_utterances[3], 'nsubj')
+        text_no_dep = [token.text for token in no_dep]
+        self.assertEqual(text_no_dep, ['is', 'a', 'common', 'name', '.'])
+
 if __name__ == '__main__':
     unittest.main()
