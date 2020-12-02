@@ -8,14 +8,14 @@ The idea behind this is to make it easy to, from a high level, preprocess lots o
 - [ ] Normalising (Using SpaCy and re)
     - [ ] chosen entities (e.g. names, places, organizations, numbers, etc.)
     - [ ] slang words (e.g. dunno => do not know)
-    - [ ] contractions (e.g. don't know => do not know)
-    - [ ] capitalization
-    - [ ] word numerals to numbers (e.g. twenty three => 23)
-    - [ ] date formats
-    - [ ] Acronyms (e.g. US => United States, btw => by the way)
+    - [ ] contractions (e.g. don't know => do not know) (contractions library)
+    - [ ] capitalization (lower function)
+    - <s>[ ] word numerals to numbers (e.g. twenty three => 23)</s> (will use entity tagging to normalise this)
+    - [ ] date formats (normalise library)
+    - [ ] Acronyms (e.g. US => United States, btw => by the way) (normalise library)
     - [ ] Substitution of rare words with closely related synonyms.
     - [x] non ASCII characters
-    - [ ] Smilies
+    - [ ] Smilies 
 - [x] Stopword removal (Using SpaCy)
 - [x] Punctuation removal (Using SpaCy)
 - [x] Spelling correction (pySymSpell or some kind of dl model)
