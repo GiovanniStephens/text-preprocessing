@@ -136,6 +136,18 @@ class test_textPreprocessing(unittest.TestCase):
         self.assertEqual(tp.correct_spelling('somethingCaroline DID.'), \
             'something Caroline DID')
 
+    def test_correct_spelling_acronyms(self):
+        """Shows how the spell-checker works."""
+        tp.load_sym_spell_dict()
+        self.assertEqual(tp.correct_spelling('I have never been to the US.'), \
+            'I have never been to the US')
+
+    def test_correct_spelling_contractions(self):
+        """Shows how the spell-checker works with contractions."""
+        tp.load_sym_spell_dict()
+        self.assertEqual(tp.correct_spelling('I\'ve never been to the US though I\'m keen.'), \
+            'Have never been to the US though I\'m keen')
+
     def test_remove_html_tags(self):
         """Test removing HTML tags from a string."""
         self.assertEqual(tp.remove_html_tags('<title>Testing string</title>'), \
