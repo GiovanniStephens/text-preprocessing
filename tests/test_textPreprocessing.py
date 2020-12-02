@@ -29,46 +29,93 @@ class test_textPreprocessing(unittest.TestCase):
 
     def test_tokenizer(self):
         """Tests to see if the preprocessor has tokenised correctly"""
-        self.assertEqual(['This', 'is', 'a', 'testing', 'sentence', '.'], \
+        self.proprocessor.preprocess_text(
+            drop_excess_whitespace=False,
+            drop_html=False,
+            clean_ascii=False,
+            fix_spelling=False,
+            drop_stop_words=False,
+            drop_punctuation=True)
+        self.assertEqual(['This', 'is', 'a', 'testing', 'sentence'], \
             [token.text for token in self.proprocessor.nlp_utterances[0]])
 
     def test_remove_stop_words(self):
         """Checks that stop words are being removed correctly."""
-        no_stop_words = tp.remove_stop_words(\
-            self.proprocessor.nlp_utterances[0])
+        self.proprocessor.preprocess_text(
+            drop_excess_whitespace=False,
+            drop_html=False,
+            clean_ascii=False,
+            fix_spelling=False,
+            drop_stop_words=True,
+            drop_punctuation=False)
+        no_stop_words = self.proprocessor.nlp_utterances[0]
         text_no_stop_words = [token.text for token in no_stop_words]
         self.assertEqual(text_no_stop_words, ['testing', 'sentence', '.'])
 
     def test_remove_punctuation(self):
         """Tests whether punctuation is correctly removed."""
-        no_punc = tp.remove_punctuation(\
-            self.proprocessor.nlp_utterances[0])
+        self.proprocessor.preprocess_text(
+            drop_excess_whitespace=False,
+            drop_html=False,
+            clean_ascii=False,
+            fix_spelling=False,
+            drop_stop_words=False,
+            drop_punctuation=True)
+        no_punc = self.proprocessor.nlp_utterances[0]
         text_no_punct = [token.text for token in no_punc]
         self.assertEqual(text_no_punct, ['This', 'is', 'a', 'testing', 'sentence'])
 
     def test_stop_and_punct_removal(self):
-        self.proprocessor.preprocess_text()
-        cleaned_text = [token.text for token in self.proprocessor.cleaned_utterances[0]]
+        """Test removing punctuation and stop words.""" 
+        self.proprocessor.preprocess_text(
+            drop_excess_whitespace=False,
+            drop_html=False,
+            clean_ascii=False,
+            fix_spelling=False,
+            drop_stop_words=True,
+            drop_punctuation=True)
+        cleaned_text = [token.text for token in self.proprocessor.nlp_utterances[0]]
         self.assertEqual(cleaned_text, ['testing', 'sentence'])
 
     def test_remove_entity(self):
         """Tests removing an entity from a test utterance."""
-        no_ent = tp.remove_entity(\
-            self.proprocessor.nlp_utterances[3], 'PERSON')
+        self.proprocessor.preprocess_text(
+            drop_excess_whitespace=False,
+            drop_html=False,
+            clean_ascii=False,
+            fix_spelling=False,
+            drop_stop_words=False,
+            drop_punctuation=False,
+            drop_ent=['PERSON'])
+        no_ent = self.proprocessor.nlp_utterances[3]
         text_no_ent = [token.text for token in no_ent]
         self.assertEqual(text_no_ent, ['is', 'a', 'common', 'name', '.'])
 
     def test_remove_dep(self):
         """Tests removing a dependency from a test utterance."""
-        no_dep = tp.remove_dependency(\
-            self.proprocessor.nlp_utterances[3], 'nsubj')
+        self.proprocessor.preprocess_text(
+            drop_excess_whitespace=False,
+            drop_html=False,
+            clean_ascii=False,
+            fix_spelling=False,
+            drop_stop_words=False,
+            drop_punctuation=False,
+            drop_dep=['nsubj'])
+        no_dep = self.proprocessor.nlp_utterances[3]
         text_no_dep = [token.text for token in no_dep]
         self.assertEqual(text_no_dep, ['is', 'a', 'common', 'name', '.'])
 
     def test_remove_pos(self):
         """Tests removing nouns from a test utterance."""
-        no_pos = tp.remove_pos(\
-            self.proprocessor.nlp_utterances[3], 'NOUN')
+        self.proprocessor.preprocess_text(
+            drop_excess_whitespace=False,
+            drop_html=False,
+            clean_ascii=False,
+            fix_spelling=False,
+            drop_stop_words=False,
+            drop_punctuation=False,
+            drop_pos=['NOUN'])
+        no_pos = self.proprocessor.nlp_utterances[3]
         text_no_pos = [token.text for token in no_pos]
         self.assertEqual(text_no_pos, ['John', 'is', 'a', 'common', '.'])
 
