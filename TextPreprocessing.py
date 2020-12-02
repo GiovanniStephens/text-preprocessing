@@ -34,6 +34,17 @@ def remove_entity(utterance, entity):
     """
     return [token for token in utterance if token.ent_type_ != entity]
 
+def remove_dependency(utterance, dep):
+    """
+    Removes specific semantic dependency from the input SpaCy nlp utterance
+    
+    :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
+    :dep: the dependency name you want to remove (see this list for examples:
+    https://spacy.io/usage/linguistic-features#pos-tagging)
+    :return: list of SpaCy tokens minus the dependency
+    """
+    return [token for token in utterance if token.dep_ != dep]
+
 class TextPreprocessing():
 
     def __init__(self, utterances, pipes = ['entity_ruler', 'sentencizer']) -> None:
