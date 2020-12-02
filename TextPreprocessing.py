@@ -6,10 +6,33 @@ from toolz import compose
 #         return functools.reduce(lambda a, x: x(a), fns, data)
 
 def remove_stop_words(utterance):
-        return [token for token in utterance if not token.is_stop]
+    """
+    Removes stop words from the input SpaCy nlp utterance
+    
+    :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
+    :return: list of SpaCy tokens minus stop words
+    """
+    return [token for token in utterance if not token.is_stop]
 
 def remove_punctuation(utterance):
-        return [token for token in utterance if not token.is_punct]
+    """
+    Removes punctuation from the input SpaCy nlp utterance
+    
+    :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
+    :return: list of SpaCy tokens minus punctuation
+    """
+    return [token for token in utterance if not token.is_punct]
+
+def remove_entity(utterance, entity):
+    """
+    Removes specific entities from the input SpaCy nlp utterance
+    
+    :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
+    :entity: the entity name you want to remove (see this list for examples:
+    https://spacy.io/api/annotation#named-entities)
+    :return: list of SpaCy tokens minus the entities
+    """
+    return [token for token in utterance if token.ent_type_ != entity]
 
 class TextPreprocessing():
 
@@ -27,6 +50,8 @@ class TextPreprocessing():
     def load_nlp_pipe(self, pipes):
         """
         This function creates and loads all the pipes into the nlp-er
+
+        :pipes: list of pipe names as strings
         """
 
         for pipe in pipes:
