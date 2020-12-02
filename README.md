@@ -10,15 +10,15 @@ The idea behind this is to make it easy to, from a high level, preprocess lots o
     2. slang words (e.g. dunno => do not know)
     3. contractions (e.g. don't know => do not know)
     4. capitalization
-    5. non ASCII characters
+    5. non ASCII characters (done)
     6. Smilies
 3. Stopword removal (Using SpaCy) (done)
 4. Punctuation removal (Using SpaCy) (done)
 5. Spelling correction (pySymSpell or some kind of dl model) (done)
 6. Lemmatization (Using SpaCy)
-7. Removal of noise (Using SpaCy)
-    1. Extra whitespace
-    2. HTML tags
+7. Removal of noise (Using SpaCy) (done)
+    1. Extra whitespace (done)
+    2. HTML tags (done)
 8. POS tagging (Using SpaCy) (done)
 9. DEP tagging (Using SpaCy) (done)
 10. Removal of specifics such as: (Using SpaCy) (done)
