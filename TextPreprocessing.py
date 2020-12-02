@@ -73,38 +73,38 @@ def remove_punctuation(utterance):
     """
     return [token for token in utterance if not token.is_punct]
 
-def remove_entity(utterance, entity):
+def remove_entity(utterance, entities):
     """
     Removes specific entities from the input SpaCy nlp utterance
     
     :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
-    :entity: the entity name you want to remove (see this list for examples:
-    https://spacy.io/api/annotation#named-entities)
+    :entities: the list of entity names you want to remove 
+    (see this list for examples: https://spacy.io/api/annotation#named-entities)
     :return: list of SpaCy tokens minus the entities
     """
-    return [token for token in utterance if token.ent_type_ != entity]
+    return [token for token in utterance if token.ent_type_ not in entities]
 
 def remove_dependency(utterance, dep):
     """
     Removes specific semantic dependency from the input SpaCy nlp utterance
     
     :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
-    :dep: the dependency name you want to remove (see this list for examples:
-    https://spacy.io/usage/linguistic-features#pos-tagging)
+    :dep: the list of dependency name you want to remove 
+    (see this list for examples: https://spacy.io/usage/linguistic-features#pos-tagging)
     :return: list of SpaCy tokens minus the dependency
     """
-    return [token for token in utterance if token.dep_ != dep]
+    return [token for token in utterance if token.dep_ not in dep]
 
 def remove_pos(utterance, pos):
     """
     Removes specific part of speech from the input SpaCy nlp utterance
     
     :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
-    :pos: the part of speech you want to remove (see this list for examples:
-    https://spacy.io/usage/linguistic-features#pos-tagging)
+    :pos: the list of part of speech you want to remove 
+    (see this list for examples: https://spacy.io/usage/linguistic-features#pos-tagging)
     :return: list of SpaCy tokens minus the dependency
     """
-    return [token for token in utterance if token.pos_ != pos]
+    return [token for token in utterance if token.pos_ not in pos]
 
 class TextPreprocessing():
 
@@ -115,8 +115,6 @@ class TextPreprocessing():
         # Load SpaCy pipeline 
         if pipes != None:
             self.load_nlp_pipe(pipes)
-        # Process utterances (i.e. tokenising, tagging, etc.)
-        self.nlp_utterances = list(self.nlp.pipe(utterances))
 
     # Load NLP pipeline
     def load_nlp_pipe(self, pipes):
@@ -133,6 +131,41 @@ class TextPreprocessing():
             else:
                 self.nlp.add_pipe(nlp_pipe)
 
-    def preprocess_text(self, fns=[remove_stop_words, remove_punctuation]):
-        nlp_pipeline = compose(*fns)
-        self.cleaned_utterances = list(map(nlp_pipeline,self.nlp_utterances))
+    def preprocess_text(self, 
+        drop_excess_whitespace=True,
+        drop_html=True,
+        clean_ascii=True,
+        fix_spelling=True,
+        drop_stop_words=True,
+        drop_punctuation=True,
+        drop_pos = None,
+        drop_dep = None,
+        drop_ent = None):
+
+        self.cleaned_utterances = self.raw_utterances
+        if drop_excess_whitespace: 
+            self.cleaned_utterances = list(map(remove_excess_whitespace, self.cleaned_utterances))
+        if drop_html: 
+            self.cleaned_utterances = list(map(remove_html_tags, self.cleaned_utterances))
+        if clean_ascii: 
+            self.cleaned_utterances = list(map(convert_non_ascii, self.cleaned_utterances))
+        if fix_spelling:
+            self.cleaned_utterances = list(map(correct_spelling, self.cleaned_utterances))
+        
+        if drop_stop_words or drop_punctuation or drop_pos != None or drop_dep != None or drop_ent != None:
+            # Process utterances (i.e. tokenising, tagging, etc.)
+            self.nlp_utterances = list(self.nlp.pipe(self.cleaned_utterances))
+        
+        if drop_stop_words:
+            self.nlp_utterances = list(map(remove_stop_words, self.nlp_utterances))
+        if drop_punctuation:
+            self.nlp_utterances = list(map(remove_punctuation, self.nlp_utterances))
+        if drop_pos != None:
+            self.nlp_utterances = list(map(lambda utterance: \
+                remove_pos(utterance, drop_pos), self.nlp_utterances))
+        if drop_dep != None:
+            self.nlp_utterances = list(map(lambda utterance: \
+                remove_dependency(utterance, drop_dep), self.nlp_utterances))
+        if drop_ent != None:
+            self.nlp_utterances = list(map(lambda utterance: \
+                remove_entity(utterance, drop_ent), self.nlp_utterances))
