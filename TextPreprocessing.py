@@ -1,4 +1,6 @@
 import spacy
+import re
+from unidecode import unidecode
 import functools
 from toolz import compose
 
@@ -9,24 +11,49 @@ import pkg_resources
 from symspellpy import SymSpell, Verbosity 
 sym_spell = SymSpell()
 
-#Load the corpus for the spell-checker. 
 def load_sym_spell_dict():
     """
     This function loads the dictionary for the spell-corrector. 
     max edit distance is 2.
     """
-
     dictionary_path = pkg_resources.resource_filename(
     "symspellpy", "frequency_dictionary_en_82_765.txt")
     sym_spell.load_dictionary(dictionary_path, 0, 1)
 
-#Split/correct spelling to the most likely/probable word/sentence. 
 def correct_spelling(text):
     """
     This function attempts to correct the spelling of a string using Symspell.
     """
-
     return sym_spell.lookup_compound(text, max_edit_distance=2, transfer_casing=True, ignore_non_words=True)[0].term
+
+def remove_html_tags(utterance):
+    """
+    Remove html tags from a string
+    
+    :utterance: string that we would like to clean.
+    :return: cleanned string
+    """
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', utterance)
+
+def remove_excess_whitespace(utterance):
+    """
+    Remove excess whitespace from string.
+
+    :utterance: string that we would like to clean.
+    :return: cleanned string
+    """
+    return " ".join(utterance.split())
+
+def convert_non_ascii(utterance):
+    """
+    Try to convert non-ASCII characters to something readable in
+    English.
+
+    :utterance: string that we would like to clean.
+    :return: cleanned string
+    """
+    return unidecode(utterance)
 
 def remove_stop_words(utterance):
     """
