@@ -9,7 +9,8 @@ class test_textPreprocessing(unittest.TestCase):
         self.test_utterances = [
             'This is a testing sentence.',
             'This is also a test phrase.',
-            'Some things don\'t match with the others.'
+            'Some things don\'t match with the others.',
+            'John is a common name.'
         ]
         self.proprocessor = \
             tp.TextPreprocessing(self.test_utterances)
@@ -48,6 +49,13 @@ class test_textPreprocessing(unittest.TestCase):
         self.proprocessor.preprocess_text()
         cleaned_text = [token.text for token in self.proprocessor.cleaned_utterances[0]]
         self.assertEqual(cleaned_text, ['testing', 'sentence'])
+
+    def test_remove_entity(self):
+        """Tests removing an entity from a test utterance."""
+        no_ent = tp.remove_entity(\
+            self.proprocessor.nlp_utterances[3], 'PERSON')
+        text_no_ent = [token.text for token in no_ent]
+        self.assertEqual(text_no_ent, ['is', 'a', 'common', 'name', '.'])
 
 if __name__ == '__main__':
     unittest.main()
