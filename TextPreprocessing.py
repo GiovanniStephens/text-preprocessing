@@ -1,4 +1,15 @@
 import spacy
+import functools
+from toolz import compose
+
+# def pipeline_func(data, fns):
+#         return functools.reduce(lambda a, x: x(a), fns, data)
+
+def remove_stop_words(utterance):
+        return [token for token in utterance if not token.is_stop]
+
+def remove_punctuation(utterance):
+        return [token for token in utterance if not token.is_punct]
 
 class TextPreprocessing():
 
@@ -24,3 +35,7 @@ class TextPreprocessing():
                 self.nlp.add_pipe(nlp_pipe, before='parser')
             else:
                 self.nlp.add_pipe(nlp_pipe)
+
+    def preprocess_text(self, fns=[remove_stop_words, remove_punctuation]):
+        nlp_pipeline = compose(*fns)
+        self.cleaned_utterances = list(map(nlp_pipeline,self.nlp_utterances))
