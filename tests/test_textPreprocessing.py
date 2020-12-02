@@ -1,5 +1,6 @@
 import unittest
 import TextPreprocessing as tp
+from TextPreprocessing import remove_html_tags
 
 class test_textPreprocessing(unittest.TestCase):
 
@@ -79,12 +80,29 @@ class test_textPreprocessing(unittest.TestCase):
     def test_correct_spelling_joined(self):
         """Testing the spell checker with joined words."""
         tp.load_sym_spell_dict()
-        self.assertEqual(tp.correct_spelling('somethingcaroline did.'), 'something caroline did')
+        self.assertEqual(tp.correct_spelling('somethingcaroline did.'), \
+             'something caroline did')
 
     def test_correct_spelling_caps(self):
         """Testing the spell checker with joined words."""
         tp.load_sym_spell_dict()
-        self.assertEqual(tp.correct_spelling('somethingCaroline DID.'), 'something Caroline DID')
+        self.assertEqual(tp.correct_spelling('somethingCaroline DID.'), \
+            'something Caroline DID')
+
+    def test_remove_html_tags(self):
+        """Test removing HTML tags from a string."""
+        self.assertEqual(tp.remove_html_tags('<title>Testing string</title>'), \
+            'Testing string')
+
+    def test_remove_excess_whitespace(self):
+        """Test removing excess white space."""
+        self.assertEqual(tp.remove_excess_whitespace('Hello  World   From Gio \t\n\r\tHi There'), \
+            'Hello World From Gio Hi There')
+
+    def test_convert_non_ascii(self):
+        """Test transliterating non-ASCII characters to ASCII characters."""
+        self.assertEqual(tp.convert_non_ascii('¿Hola, cómo estás, coño?'), \
+            '?Hola, como estas, cono?')
 
 if __name__ == '__main__':
     unittest.main()
