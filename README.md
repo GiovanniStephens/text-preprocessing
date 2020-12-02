@@ -25,4 +25,7 @@ This module contains all my preprocessing functions for text data.
     3. Part of speech elements
 
 # Other components
-1. It needs to be run in parallel so that it can handle a large number of documents at a time. 
+1. It needs to be run in parallel so that it can handle a large number of documents at a time.  
+
+pipeline would be:  
+Removal of noise with re --> Spelling correction --> NLP with SpaCy --> all SpaCy cleaning functions.
