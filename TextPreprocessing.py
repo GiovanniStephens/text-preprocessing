@@ -45,6 +45,17 @@ def remove_dependency(utterance, dep):
     """
     return [token for token in utterance if token.dep_ != dep]
 
+def remove_pos(utterance, pos):
+    """
+    Removes specific part of speech from the input SpaCy nlp utterance
+    
+    :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
+    :pos: the part of speech you want to remove (see this list for examples:
+    https://spacy.io/usage/linguistic-features#pos-tagging)
+    :return: list of SpaCy tokens minus the dependency
+    """
+    return [token for token in utterance if token.pos_ != pos]
+
 class TextPreprocessing():
 
     def __init__(self, utterances, pipes = ['entity_ruler', 'sentencizer']) -> None:
