@@ -5,26 +5,26 @@ The idea behind this is to make it easy to, from a high level, preprocess lots o
 
 # Things I would like to include:
 - [x] Tokenising (Using SpaCy)
-- Normalising (Using SpaCy and re)
-    - entities (e.g. names, places, organizations, numbers, etc.)
-    - slang words (e.g. dunno => do not know)
-    - contractions (e.g. don't know => do not know)
-    - capitalization
-    - non ASCII characters (done)
-    - Smilies
-- Stopword removal (Using SpaCy) (done)
-- Punctuation removal (Using SpaCy) (done)
-- Spelling correction (pySymSpell or some kind of dl model) (done)
-- Lemmatization (Using SpaCy)
-- Removal of noise (Using SpaCy) (done)
-    - Extra whitespace (done)
-    - HTML tags (done)
-- POS tagging (Using SpaCy) (done)
-- DEP tagging (Using SpaCy) (done)
-- Removal of specifics such as: (Using SpaCy) (done)
-    - Entities (done)
-    - Dependencies (done)
-    - Part of speech elements (done)
+- [ ] Normalising (Using SpaCy and re)
+    - [ ] entities (e.g. names, places, organizations, numbers, etc.)
+    - [ ] slang words (e.g. dunno => do not know)
+    - [ ] contractions (e.g. don't know => do not know)
+    - [ ] capitalization
+    - [x] non ASCII characters
+    - [ ] Smilies
+- [x] Stopword removal (Using SpaCy)
+- [x] Punctuation removal (Using SpaCy)
+- [x] Spelling correction (pySymSpell or some kind of dl model)
+- [ ] Lemmatization (Using SpaCy)
+- [x] Removal of noise (Using SpaCy)
+    - [x] Extra whitespace
+    - [x] HTML tags
+- [x] POS tagging (Using SpaCy)
+- [x] DEP tagging (Using SpaCy)
+- [x] Removal of specifics such as: (Using SpaCy)
+    - [x] Entities
+    - [x] Dependencies
+    - [x] Part of speech elements
 
 # Other components
 1. It needs to be run in parallel so that it can handle a large number of documents at a time.  
