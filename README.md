@@ -34,4 +34,4 @@ The idea behind this is to make it easy to, from a high level, preprocess lots o
 1. It needs to be run in parallel so that it can handle a large number of documents at a time.  
 
 pipeline would be:  
-Removal of noise with re --> Spelling correction --> Normalization --> NLP with SpaCy --> all SpaCy cleaning functions.
+Removal of noise with re --> Normalization --> Spelling correction --> NLP with SpaCy --> all SpaCy cleaning functions.
