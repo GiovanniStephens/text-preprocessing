@@ -1,5 +1,7 @@
 # text-preprocessing
-This module contains all my preprocessing functions for text data. 
+This module contains all my preprocessing functions for text data.  
+
+The idea behind this is to make it easy to, from a high level, preprocess lots of text with an easy call to a high-level function that does everything for you. It needs to be flexible enough so that you can change what preprocessing you do while not having to rewrite code all the time. 
 
 # Things I would like to include:
 1. Tokenising (Using SpaCy) (done)
@@ -12,7 +14,7 @@ This module contains all my preprocessing functions for text data.
     6. Smilies
 3. Stopword removal (Using SpaCy) (done)
 4. Punctuation removal (Using SpaCy) (done)
-5. Spelling correction (pySymSpell or some kind of dl model)
+5. Spelling correction (pySymSpell or some kind of dl model) (done)
 6. Lemmatization (Using SpaCy)
 7. Removal of noise (Using SpaCy)
     1. Extra whitespace
