@@ -30,5 +30,24 @@ class test_textPreprocessing(unittest.TestCase):
         self.assertEqual(['This', 'is', 'a', 'testing', 'sentence', '.'], \
             [token.text for token in self.proprocessor.nlp_utterances[0]])
 
+    def test_remove_stop_words(self):
+        """Checks that stop words are being removed correctly."""
+        no_stop_words = tp.remove_stop_words(\
+            self.proprocessor.nlp_utterances[0])
+        text_no_stop_words = [token.text for token in no_stop_words]
+        self.assertEqual(text_no_stop_words, ['testing', 'sentence', '.'])
+
+    def test_remove_punctuation(self):
+        """Tests whether punctuation is correctly removed."""
+        no_punc = tp.remove_punctuation(\
+            self.proprocessor.nlp_utterances[0])
+        text_no_punct = [token.text for token in no_punc]
+        self.assertEqual(text_no_punct, ['This', 'is', 'a', 'testing', 'sentence'])
+
+    def test_stop_and_punct_removal(self):
+        self.proprocessor.preprocess_text()
+        cleaned_text = [token.text for token in self.proprocessor.cleaned_utterances[0]]
+        self.assertEqual(cleaned_text, ['testing', 'sentence'])
+
 if __name__ == '__main__':
     unittest.main()
