@@ -137,7 +137,7 @@ def convert_emojis(utterance):
     :return: expanded utterance with no emojis.
     """
     for emot in UNICODE_EMO:
-        utterance = utterance.replace(emot, " ".join(UNICODE_EMO[emot].replace(",","").replace(":","").split()))
+        utterance = utterance.replace(emot, " ".join(UNICODE_EMO[emot].replace(",","").replace(":","").replace('_', ' ').split()))
     return utterance
 
 class TextPreprocessing():
