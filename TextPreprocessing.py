@@ -1,8 +1,10 @@
 import spacy
 import re
+from emot.emo_unicode import EMOTICONS, UNICODE_EMO
 from unidecode import unidecode
 import functools
 from toolz import compose
+import contractions
 
 #Package discovery and resource access: https://setuptools.readthedocs.io/en/latest/pkg_resources.html
 import pkg_resources
@@ -106,6 +108,38 @@ def remove_pos(utterance, pos):
     """
     return [token for token in utterance if token.pos_ not in pos]
 
+def split_contractions(utterance):
+    """
+    Replaces contracts with their full counterparts. 
+    e.g. don't becomes do not. 
+    
+    :utterance: phrase in a string.
+    :return: expanded utterance with no contractions.
+    """
+    return contractions.fix(utterance)
+
+def convert_emoticons(utterance):
+    """
+    Converts emoticons like :) to word representations.
+
+    :utterance: phrase in a string.
+    :return: expanded utterance with no emoticons.
+    """
+    for emot in EMOTICONS:
+        utterance = utterance.replace(emot, " ".join(EMOTICONS[emot].replace(",","").replace(":","").split()))
+    return utterance
+
+def convert_emojis(utterance):
+    """
+    Converts emojis to word representations.
+
+    :utterance: phrase in a string.
+    :return: expanded utterance with no emojis.
+    """
+    for emot in UNICODE_EMO:
+        utterance = utterance.replace(emot, " ".join(UNICODE_EMO[emot].replace(",","").replace(":","").split()))
+    return utterance
+
 class TextPreprocessing():
 
     def __init__(self, utterances, pipes = ['entity_ruler', 'sentencizer']) -> None:
@@ -138,6 +172,7 @@ class TextPreprocessing():
         fix_spelling=True,
         drop_stop_words=True,
         drop_punctuation=True,
+        normalise_contractions=True,
         drop_pos = None,
         drop_dep = None,
         drop_ent = None):
@@ -149,6 +184,8 @@ class TextPreprocessing():
             self.cleaned_utterances = list(map(remove_html_tags, self.cleaned_utterances))
         if clean_ascii: 
             self.cleaned_utterances = list(map(convert_non_ascii, self.cleaned_utterances))
+        if normalise_contractions:
+            self.cleaned_utterances = list(map(split_contractions, self.cleaned_utterances))
         if fix_spelling:
             self.cleaned_utterances = list(map(correct_spelling, self.cleaned_utterances))
         
