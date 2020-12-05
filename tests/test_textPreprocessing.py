@@ -173,5 +173,10 @@ class test_textPreprocessing(unittest.TestCase):
         self.assertEqual(tp.convert_emoticons('Hi! :D'), \
             'Hi! Laughing big grin or laugh with glasses')
 
+    def test_convert_emojis(self):
+        """Tests converting emojis to a text representation."""
+        self.assertEqual(tp.convert_emojis('Hilarious 😂.'), \
+            'Hilarious face with tears of joy.')
+
 if __name__ == '__main__':
     unittest.main()
