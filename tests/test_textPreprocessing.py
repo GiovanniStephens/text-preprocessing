@@ -163,5 +163,15 @@ class test_textPreprocessing(unittest.TestCase):
         self.assertEqual(tp.convert_non_ascii('¿Hola, cómo estás, coño?'), \
             '?Hola, como estas, cono?')
 
+    def test_split_contractions(self):
+        """Test contractions splitter."""
+        self.assertEqual(tp.split_contractions('I\'m wanting to test this.'), \
+            'I am wanting to test this.')
+
+    def test_convert_emoticons(self):
+        """Test converting emoticons to text representations."""
+        self.assertEqual(tp.convert_emoticons('Hi! :D'), \
+            'Hi! Laughing big grin or laugh with glasses')
+
 if __name__ == '__main__':
     unittest.main()
