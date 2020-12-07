@@ -86,6 +86,19 @@ def remove_entity(utterance, entities):
     """
     return [token for token in utterance if token.ent_type_ not in entities]
 
+def norm_entity(utterance, entities):
+    norm_tokens = []
+    for token in utterance:
+        if token.ent_type_ in entities:
+            norm_tokens.append(token.ent_type_)
+        else:
+            norm_tokens.append(token)
+    return norm_tokens
+
+def lemmatise(utterance):
+    return [token.lemma_ for token in utterance if \
+        isinstance(token, spacy.tokens.token.Token)]
+
 def remove_dependency(utterance, dep):
     """
     Removes specific semantic dependency from the input SpaCy nlp utterance
@@ -140,6 +153,8 @@ def convert_emojis(utterance):
         utterance = utterance.replace(emot, " ".join(UNICODE_EMO[emot].replace(",","").replace(":","").replace('_', ' ').split()))
     return utterance
 
+
+
 class TextPreprocessing():
 
     def __init__(self, utterances, pipes = ['entity_ruler', 'sentencizer']) -> None:
@@ -165,33 +180,53 @@ class TextPreprocessing():
             else:
                 self.nlp.add_pipe(nlp_pipe)
 
-    def preprocess_text(self, 
+    def clean_text(self,
         drop_excess_whitespace=True,
         drop_html=True,
-        clean_ascii=True,
-        fix_spelling=True,
-        drop_stop_words=True,
-        drop_punctuation=True,
-        normalise_contractions=True,
-        drop_pos = None,
-        drop_dep = None,
-        drop_ent = None):
+        clean_ascii=True):
 
         self.cleaned_utterances = self.raw_utterances
+
         if drop_excess_whitespace: 
             self.cleaned_utterances = list(map(remove_excess_whitespace, self.cleaned_utterances))
         if drop_html: 
             self.cleaned_utterances = list(map(remove_html_tags, self.cleaned_utterances))
         if clean_ascii: 
             self.cleaned_utterances = list(map(convert_non_ascii, self.cleaned_utterances))
-        if normalise_contractions:
-            self.cleaned_utterances = list(map(split_contractions, self.cleaned_utterances))
+
+    def normalise_text(self,
+        fix_spelling=True,
+        normalise_contractions=True,
+        normalise_emojis=True,
+        norm_ents=None,
+        lemma=True):
+
         if fix_spelling:
             self.cleaned_utterances = list(map(correct_spelling, self.cleaned_utterances))
-        
-        if drop_stop_words or drop_punctuation or drop_pos != None or drop_dep != None or drop_ent != None:
-            # Process utterances (i.e. tokenising, tagging, etc.)
-            self.nlp_utterances = list(self.nlp.pipe(self.cleaned_utterances))
+        if normalise_contractions:
+            self.cleaned_utterances = list(map(split_contractions, self.cleaned_utterances))
+        if normalise_emojis:
+            self.cleaned_utterances = list(map(convert_emoticons, self.cleaned_utterances))
+            self.cleaned_utterances = list(map(convert_emojis, self.cleaned_utterances))
+
+        if self.nlp_utterances == None:
+             self.nlp_utterances = list(self.nlp.pipe(self.cleaned_utterances))
+            
+        if norm_ents != None:
+            self.nlp_utterances = list(map(lambda utterance: \
+                norm_entity(utterance, norm_ents), self.nlp_utterances))
+        if lemma:
+            self.nlp_utterances = list(map(lemmatise, self.nlp_utterances))
+
+    def filter_text(self, 
+        drop_stop_words=True,
+        drop_punctuation=True,
+        drop_pos = None,
+        drop_dep = None,
+        drop_ent = None):
+
+        if self.nlp_utterances == None:
+             self.nlp_utterances = list(self.nlp.pipe(self.cleaned_utterances))
         
         if drop_stop_words:
             self.nlp_utterances = list(map(remove_stop_words, self.nlp_utterances))
