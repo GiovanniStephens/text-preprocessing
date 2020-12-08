@@ -89,15 +89,15 @@ def remove_entity(utterance, entities):
 def norm_entity(utterance, entities):
     norm_tokens = []
     for token in utterance:
-        if token.ent_type_ in entities:
+        if not isinstance(token, str) and token.ent_type_ in entities:
             norm_tokens.append(token.ent_type_)
         else:
             norm_tokens.append(token)
     return norm_tokens
 
 def lemmatise(utterance):
-    return [token.lemma_ for token in utterance if \
-        isinstance(token, spacy.tokens.token.Token)]
+    return [token.lemma_ if isinstance(token, spacy.tokens.token.Token) \
+        else token for token in utterance]
 
 def remove_dependency(utterance, dep):
     """
@@ -159,12 +159,15 @@ class TextPreprocessing():
 
     def __init__(self, utterances, pipes = ['entity_ruler', 'sentencizer']) -> None:
         self.raw_utterances = utterances
+        self.cleaned_utterances = self.raw_utterances
+        self.nlp_utterances = None
+
         # Load SpaCy model
         self.nlp = spacy.load('en_core_web_sm')
         # Load SpaCy pipeline 
         if pipes != None:
             self.load_nlp_pipe(pipes)
-
+        
     # Load NLP pipeline
     def load_nlp_pipe(self, pipes):
         """
@@ -184,8 +187,6 @@ class TextPreprocessing():
         drop_excess_whitespace=True,
         drop_html=True,
         clean_ascii=True):
-
-        self.cleaned_utterances = self.raw_utterances
 
         if drop_excess_whitespace: 
             self.cleaned_utterances = list(map(remove_excess_whitespace, self.cleaned_utterances))
@@ -226,7 +227,7 @@ class TextPreprocessing():
         drop_ent = None):
 
         if self.nlp_utterances == None:
-             self.nlp_utterances = list(self.nlp.pipe(self.cleaned_utterances))
+            self.nlp_utterances = list(self.nlp.pipe(self.cleaned_utterances))
         
         if drop_stop_words:
             self.nlp_utterances = list(map(remove_stop_words, self.nlp_utterances))
