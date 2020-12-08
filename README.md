@@ -42,3 +42,4 @@ Removal of noise with re --> Normalization --> Spelling correction --> NLP with 
 - [x] Test the norm functions
 - [ ] Create a high-level function to perform all the cleaning with default values.
 - [ ] More testing
+- [ ] Comment my functions
