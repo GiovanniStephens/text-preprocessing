@@ -14,12 +14,12 @@ class test_textPreprocessing(unittest.TestCase):
             'Some things don\'t match with the others.',
             'John is a common name.'
         ]
-        self.proprocessor = \
+        self.preprocessor = \
             tp.TextPreprocessing(self.test_utterances)
 
     def test_pipes_loaded(self):
         """Tests that the SpaCy NLP pipeline has been correctly set up."""
-        self.assertEqual(self.proprocessor.nlp.pipe_names, \
+        self.assertEqual(self.preprocessor.nlp.pipe_names, \
              ['tagger', 'sentencizer', 'parser', 'ner', 'entity_ruler'])
 
     def test_no_additonal_pipes(self):
@@ -30,72 +30,72 @@ class test_textPreprocessing(unittest.TestCase):
 
     def test_tokenizer(self):
         """Tests to see if the preprocessor has tokenised correctly"""
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.filter_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.filter_text(
             drop_stop_words=False,
             drop_punctuation=True)
         self.assertEqual(['This', 'is', 'a', 'testing', 'sentence'], \
-            [token.text for token in self.proprocessor.nlp_utterances[0]])
+            [token.text for token in self.preprocessor.nlp_utterances[0]])
 
     def test_remove_stop_words(self):
         """Checks that stop words are being removed correctly."""
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.filter_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.filter_text(
             drop_stop_words=True,
             drop_punctuation=False)
-        no_stop_words = self.proprocessor.nlp_utterances[0]
+        no_stop_words = self.preprocessor.nlp_utterances[0]
         text_no_stop_words = [token.text for token in no_stop_words]
         self.assertEqual(text_no_stop_words, ['testing', 'sentence', '.'])
 
     def test_remove_punctuation(self):
         """Tests whether punctuation is correctly removed."""
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.filter_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.filter_text(
             drop_stop_words=False,
             drop_punctuation=True)
-        no_punc = self.proprocessor.nlp_utterances[0]
+        no_punc = self.preprocessor.nlp_utterances[0]
         text_no_punct = [token.text for token in no_punc]
         self.assertEqual(text_no_punct, ['This', 'is', 'a', 'testing', 'sentence'])
 
     def test_stop_and_punct_removal(self):
         """Test removing punctuation and stop words.""" 
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.filter_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.filter_text(
             drop_stop_words=True,
             drop_punctuation=True)
-        cleaned_text = [token.text for token in self.proprocessor.nlp_utterances[0]]
+        cleaned_text = [token.text for token in self.preprocessor.nlp_utterances[0]]
         self.assertEqual(cleaned_text, ['testing', 'sentence'])
 
     def test_remove_entity(self):
         """Tests removing an entity from a test utterance."""
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.filter_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.filter_text(
             drop_stop_words=False,
             drop_punctuation=False,
             drop_ent=['PERSON'])
-        no_ent = self.proprocessor.nlp_utterances[3]
+        no_ent = self.preprocessor.nlp_utterances[3]
         text_no_ent = [token.text for token in no_ent]
         self.assertEqual(text_no_ent, ['is', 'a', 'common', 'name', '.'])
 
     def test_remove_dep(self):
         """Tests removing a dependency from a test utterance."""
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.filter_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.filter_text(
             drop_stop_words=False,
             drop_punctuation=False,
             drop_dep=['nsubj'])
-        no_dep = self.proprocessor.nlp_utterances[3]
+        no_dep = self.preprocessor.nlp_utterances[3]
         text_no_dep = [token.text for token in no_dep]
         self.assertEqual(text_no_dep, ['is', 'a', 'common', 'name', '.'])
 
     def test_remove_pos(self):
         """Tests removing nouns from a test utterance."""
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.filter_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.filter_text(
             drop_stop_words=False,
             drop_punctuation=False,
             drop_pos=['NOUN'])
-        no_pos = self.proprocessor.nlp_utterances[3]
+        no_pos = self.preprocessor.nlp_utterances[3]
         text_no_pos = [token.text for token in no_pos]
         self.assertEqual(text_no_pos, ['John', 'is', 'a', 'common', '.'])
 
@@ -160,28 +160,28 @@ class test_textPreprocessing(unittest.TestCase):
 
     def test_norm_entity(self):
         """Tests normalising an entity."""
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.normalise_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.normalise_text(
             fix_spelling=False,
             normalise_contractions=False,
             normalise_emojis=False,
             norm_ents=['PERSON'],
             lemma=False)
-        norm = self.proprocessor.nlp_utterances[3]
+        norm = self.preprocessor.nlp_utterances[3]
         norm_text = [token.text if isinstance(token, spacy.tokens.token.Token) \
             else token for token in norm]
         self.assertEqual(norm_text, ['PERSON', 'is', 'a', 'common', 'name', '.'])
 
     def test_lemmatise(self):
         """"Tests lemmatising the phrases."""
-        self.proprocessor.nlp_utterances = None
-        self.proprocessor.normalise_text(
+        self.preprocessor.nlp_utterances = None
+        self.preprocessor.normalise_text(
             fix_spelling=False,
             normalise_contractions=False,
             normalise_emojis=False,
             norm_ents=None,
             lemma=True)
-        norm = self.proprocessor.nlp_utterances[0]
+        norm = self.preprocessor.nlp_utterances[0]
         norm_text = [token.text if isinstance(token, spacy.tokens.token.Token) \
             else token for token in norm]
         self.assertEqual(norm_text, ['this', 'be', 'a', 'testing', 'sentence', '.'])
