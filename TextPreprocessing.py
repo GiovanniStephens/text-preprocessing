@@ -73,7 +73,7 @@ def remove_punctuation(utterance):
     :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
     :return: list of SpaCy tokens minus punctuation
     """
-    return [token for token in utterance if not token.is_punct]
+    return [token for token in utterance if (token.is_alpha or token.is_digit)]
 
 def remove_entity(utterance, entities):
     """
@@ -196,7 +196,7 @@ class TextPreprocessing():
             self.cleaned_utterances = list(map(convert_non_ascii, self.cleaned_utterances))
 
     def normalise_text(self,
-        fix_spelling=True,
+        fix_spelling=False,
         normalise_contractions=True,
         normalise_emojis=True,
         norm_ents=None,
@@ -242,3 +242,23 @@ class TextPreprocessing():
         if drop_ent != None:
             self.nlp_utterances = list(map(lambda utterance: \
                 remove_entity(utterance, drop_ent), self.nlp_utterances))
+
+    def preprocess(self):
+        self.clean_text()
+        self.normalise_text(
+            fix_spelling=True,
+            norm_ents=None,
+            lemma=False)
+        self.filter_text()
+        self.normalise_text(
+            norm_ents=[
+                'PERSON',
+                'DATE',
+                'TIME',
+                'MONEY',
+                'QUANTITY',
+                'ORDINAL',
+                'CARDINAL',
+                'PERCENT',
+            ],
+            lemma=True)
