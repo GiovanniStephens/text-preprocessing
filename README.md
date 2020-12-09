@@ -1,45 +1,51 @@
 # text-preprocessing
 This module contains all my preprocessing functions for text data.  
 
-The idea behind this is to make it easy to, from a high level, preprocess lots of text with an easy call to a high-level function that does everything for you. It needs to be flexible enough so that you can change what preprocessing you do while not having to rewrite code all the time. 
+The idea behind this is to make it easy to preprocess lots of text with an easy call to a high-level function that does everything for you. It is also flexible enough so that you can change what preprocessing you do while not having to rewrite code all the time. 
 
-# Things I would like to include:
-- [x] Tokenising (Using SpaCy)
-- [x] Normalising (Using SpaCy and re)
-    - [x] chosen entities (e.g. names, places, organizations, numbers, dates, etc.)
-    - [x] contractions (e.g. don't know => do not know) (contractions library)
-    - <s>[ ] capitalization (lower function)</s> (This can be done in post at any point.)
-    - [x] non ASCII characters
-    - [x] Smilies 
-    - [ ] slang words (e.g. dunno => do not know)
-    - <s>[ ] word numerals to numbers (e.g. twenty three => 23)</s> (will use entity tagging to normalise this)
-    - <s>[ ] date formats (normalise library.</s> Probably just replacing with a normalised version using SpaCy.)
-    - [ ] Acronyms (e.g. US => United States, btw => by the way) 
-    - <s>[ ] Substitution of rare words with closely related synonyms.(normalise library)</s> (likely a bigger problem to solve with word-sense-diambiguation.)
-    - <s>[ ] Substitution of rare words with closely related synonyms.</s>
-- [x] Stopword removal (Using SpaCy)
-- [x] Punctuation removal (Using SpaCy)
-- [x] Spelling correction (pySymSpell or some kind of dl model)
-- [x] Lemmatization (Using SpaCy)
-- [x] Removal of noise (Using SpaCy)
-    - [x] Extra whitespace
-    - [x] HTML tags
-- [x] POS tagging (Using SpaCy)
-- [x] DEP tagging (Using SpaCy)
-- [x] Removal of specifics such as: (Using SpaCy)
-    - [x] Entities
-    - [x] Dependencies
-    - [x] Part of speech elements
+# Functionality:
 
-# Other components
-1. <s>It needs to be run in parallel so that it can handle a large number of documents at a time. </s>
+## Text Cleaning:
 
-pipeline would be:  
-Removal of noise with re --> Normalization --> Spelling correction --> NLP with SpaCy --> all SpaCy cleaning functions.
+1. Removal of extra whitespace
+2. Removal of HTML tags
+3. Transliterating non ASCII characters to ASCII characters.
 
-# To-do
-- [x] Refactor tests to account for the refactoring of the preprocessing functions. 
-- [x] Test the norm functions
-- [x] Create a high-level function to perform all the cleaning with default values.
-- [x] More testing
-- [x]] Comment my functions
+## Text Normalisation:
+
+1. Normalising chosen entities (e.g. names, places, organizations, numbers, dates, etc.)
+2. Normalising chosen part of speech (POS) (e.g. 'NOUN', 'VERB', etc)
+3. Normalising chosen semantic dependencies (DEP) (e.g. 'nsubj', 'ROOT')
+4. Splitting contractions (e.g. don't know => do not know) (contractions library) 
+5. converting smilies (emoticons and emojis) to text.
+6. Spelling correction (pySymSpell)
+7. Lemmatization (Using SpaCy)
+
+## Filtering
+1. Stopword removal (Using SpaCy)
+2. Punctuation removal (Using SpaCy)
+3. Entity removal
+4. POS removal
+5. DEP removal
+
+## Preprocessing Pipeline 
+
+Removal of noise --> Basic Normalisation --> Spelling correction --> NLP with SpaCy --> Filtering --> Advanced Normalisation (ENT normalisation and lemmatisation).
+
+# Installation
+
+First, clone the repository. 
+
+In your terminal, run:  
+```
+pip install -r requirements.txt
+```
+
+# Basic Usage
+
+```python
+>>> import TextPreprocessing as tp
+>>> processor = tp.TextPreprocessing(texts)
+>>> processor.preprocess()
+>>> cleaned_texts = processor.nlp_utterances
+```
