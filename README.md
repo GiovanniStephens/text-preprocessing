@@ -5,7 +5,7 @@ The idea behind this is to make it easy to, from a high level, preprocess lots o
 
 # Things I would like to include:
 - [x] Tokenising (Using SpaCy)
-- [ ] Normalising (Using SpaCy and re)
+- [x] Normalising (Using SpaCy and re)
     - [x] chosen entities (e.g. names, places, organizations, numbers, dates, etc.)
     - [x] contractions (e.g. don't know => do not know) (contractions library)
     - <s>[ ] capitalization (lower function)</s> (This can be done in post at any point.)
@@ -32,7 +32,7 @@ The idea behind this is to make it easy to, from a high level, preprocess lots o
     - [x] Part of speech elements
 
 # Other components
-1. It needs to be run in parallel so that it can handle a large number of documents at a time.  
+1. <s>It needs to be run in parallel so that it can handle a large number of documents at a time. </s>
 
 pipeline would be:  
 Removal of noise with re --> Normalization --> Spelling correction --> NLP with SpaCy --> all SpaCy cleaning functions.
@@ -40,6 +40,6 @@ Removal of noise with re --> Normalization --> Spelling correction --> NLP with 
 # To-do
 - [x] Refactor tests to account for the refactoring of the preprocessing functions. 
 - [x] Test the norm functions
-- [ ] Create a high-level function to perform all the cleaning with default values.
-- [ ] More testing
-- [ ] Comment my functions
+- [x] Create a high-level function to perform all the cleaning with default values.
+- [x] More testing
+- [x]] Comment my functions
