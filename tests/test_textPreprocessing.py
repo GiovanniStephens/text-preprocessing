@@ -216,5 +216,23 @@ class test_textPreprocessing(unittest.TestCase):
             else token for token in norm]
         self.assertEqual(norm_text, ['testing', 'thingy', 'want', 'test', 'PERSON', 'CARDINAL'])
 
+    def test_preprocess(self):
+        test_phrase = ['<p>Tis iz a testing thingy. I\'m wantin to test. John ows me $200 >.<.   </p>']
+        processor = tp.TextPreprocessing(test_phrase)
+        processor.preprocess()
+        norm = processor.nlp_utterances[0]
+        norm_text = [token.text if isinstance(token, spacy.tokens.token.Token) \
+            else token for token in norm]
+        self.assertEqual(norm_text, ['testing', 'thingy', 'want', 'test', 'PERSON', 'CARDINAL'])
+
+    def test_preprocess_2(self):
+        test_phrase = ['Will is my best friend. last friday he came to give me $400!']
+        processor = tp.TextPreprocessing(test_phrase)
+        processor.preprocess()
+        norm = processor.nlp_utterances[0]
+        norm_text = [token.text if isinstance(token, spacy.tokens.token.Token) \
+            else token for token in norm]
+        self.assertEqual(norm_text, ['good', 'friend', 'DATE', 'come', 'CARDINAL'])
+
 if __name__ == '__main__':
     unittest.main()
