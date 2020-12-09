@@ -87,6 +87,14 @@ def remove_entity(utterance, entities):
     return [token for token in utterance if token.ent_type_ not in entities]
 
 def norm_entity(utterance, entities):
+    """
+    Normalises chosen entities to a standard string representation.
+    (e.g. 'John' and 'Emma' would both become 'PERSON')
+
+    :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
+    :entities: the list of entity names you want to normalise
+    :return: list of SpaCy tokens after normalisation
+    """
     norm_tokens = []
     for token in utterance:
         if not isinstance(token, str) and token.ent_type_ in entities:
@@ -96,6 +104,12 @@ def norm_entity(utterance, entities):
     return norm_tokens
 
 def lemmatise(utterance):
+    """
+    Returns words to their lemma. 
+
+    :utterance: a SpaCy doc object (https://spacy.io/api/doc) or list of tokens
+    :return: a list of string tokens that have been returned to their lemma.
+    """
     return [token.lemma_ if isinstance(token, spacy.tokens.token.Token) \
         else token for token in utterance]
 
@@ -154,7 +168,6 @@ def convert_emojis(utterance):
     return utterance
 
 
-
 class TextPreprocessing():
 
     def __init__(self, utterances, pipes = ['entity_ruler', 'sentencizer']) -> None:
@@ -187,7 +200,10 @@ class TextPreprocessing():
         drop_excess_whitespace=True,
         drop_html=True,
         clean_ascii=True):
-
+        """
+        Removes excess whitespace, HTML tags, and transliterates
+        non-ASCII characters. 
+        """
         if drop_excess_whitespace: 
             self.cleaned_utterances = list(map(remove_excess_whitespace, self.cleaned_utterances))
         if drop_html: 
@@ -201,7 +217,10 @@ class TextPreprocessing():
         normalise_emojis=True,
         norm_ents=None,
         lemma=True):
-
+        """
+        Fixes spelling, splits contractions, converts emojis, 
+        normalises entities, and lemmatises.
+        """
         if fix_spelling:
             self.cleaned_utterances = list(map(correct_spelling, self.cleaned_utterances))
         if normalise_contractions:
@@ -225,7 +244,9 @@ class TextPreprocessing():
         drop_pos = None,
         drop_dep = None,
         drop_ent = None):
-
+        """
+        Removes punctuation, stopwords, pos, dep, and or entities.
+        """
         if self.nlp_utterances == None:
             self.nlp_utterances = list(self.nlp.pipe(self.cleaned_utterances))
         
@@ -244,6 +265,15 @@ class TextPreprocessing():
                 remove_entity(utterance, drop_ent), self.nlp_utterances))
 
     def preprocess(self):
+        """"
+        Cleans, normalises, filters, and finally normalises a set of 
+        utterances. This function takes all the defaults for most 
+        purposes. Strips HTML tags, removes excess whitespace,
+        transliterates non-ASCII characters, converts emojis,
+        expands contractions, fixes spelling, removes stop words,
+        removes punctuation, normalises common entities, and lemmatises
+        words. 
+        """
         self.clean_text()
         self.normalise_text(
             fix_spelling=True,
